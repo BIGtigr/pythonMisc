@@ -3,40 +3,34 @@ import csv
 
 """Function reads in a query and match file, finds matching IDs and replaces based on new key value pairs in output file. Both query and match file must be tab delimited."""
 
-def id_match(queryfile, matchfile, outputfile):
+
+def dict_make():
+	queryfile = sys.argv[1]
+	matchfile = sys.argv[2]
+	outputfile = sys.argv[3]
 	with open(queryfile) as file:
-		contents = file.read().splitlines(True)
-	split_tab = [line.partition('\t') for line in contents]
-	clean_newline = [(identifier[0:], line.replace('\n', '')) for identifier, ignore, line in split_tab]
-	match_dict = {identifier[0:]: line for identifier, line in clean_newline}
-	
+		contents = file.read().splitlines(True) #read in file, split by line
+	split_tab = [line.partition('\t') for line in contents] #split contents by tab
+	clean_newline = [(identifier[0:], line.replace('\n', '')) for identifier, ignore, line in split_tab] #clean up, remove new line characters
+	match_dict = {identifier[0:]: line for identifier, line in clean_newline} #transform into dictionary	
+
 	with open(matchfile) as f:
-		data = [tuple(line) for line in csv.reader(f, delimiter = '\t')]
-	trans_data = zip(*data) #tranform data so each row is captured
-	full_list = [x[0] for x in trans_data]
-#	ids_list = full_list[1] #only second element in biom file is needed (second row of tabbed output)
-#	print ids_list[1]
+		data = [tuple(line) for line in csv.reader(f, delimiter = '\t')] #read in match file, split by tab
+	full_list = [x[0] for x in data] #capture the first element of data (keys to match)
+	print "Old and new keys to replace:"
 	for i in full_list:
 		if i in match_dict:
-			print i, match_dict[i]
-	new_dict = {i: match_dict[i] for i in full_list if i in match_dict}
+			print i, match_dict[i] #if key from matchfile is same as query file print both
+	replacements = {i: match_dict[i] for i in full_list if i in match_dict} #new dictionary with old key and new value
 	
 	infile = open(matchfile)
 	outfile = open(outputfile, 'w')
 
-	replacements = new_dict
-	for line in infile:
-		for src, target in replacements.iteritems():
-			line = line.replace(src, target)
-		outfile.write(line)
+	for line in infile: 
+		for old, new in replacements.iteritems(): #for each old and new value in replacements
+			line = line.replace(old, new) #replace old key with new value
+		outfile.write(line) #write each line to new file 
 	infile.close()
 	outfile.close()
 
-#	matches = len(full_list) 
-#	check = int(matches)-3 #minus three non-id strings
-#	print "%s elements in query file" % matches
-#	print "%s elements matched between query and match file" % check
-
-if __name__ == '__main__':
-    # Map command line arguments to function arguments.
-	id_match(*sys.argv[1:])
+dict_make()
