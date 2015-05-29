@@ -1,13 +1,15 @@
 import sys
 import csv
 
-"""Function reads in a query and match file, finds matching IDs and replaces based on new key value pairs in output file. Both query and match file must be tab delimited."""
+"""Function reads in a query and match file, finds matching IDs and replaces based on new key value pairs in output file. Both query and match file must be tab delimited. Command line run: python hash_static.py queryfile matchfile outputfile column_number_of_id"""
 
 
-def dict_make():
+def id_match():
 	queryfile = sys.argv[1]
 	matchfile = sys.argv[2]
 	outputfile = sys.argv[3]
+
+
 	with open(queryfile) as file:
 		contents = file.read().splitlines(True) #read in file, split by line
 	split_tab = [line.partition('\t') for line in contents] #split contents by tab
@@ -17,10 +19,13 @@ def dict_make():
 	with open(matchfile) as f:
 		data = [tuple(line) for line in csv.reader(f, delimiter = '\t')] #read in match file, split by tab
 	full_list = [x[0] for x in data] #capture the first element of data (keys to match)
-	print "Old and new keys to replace:"
+	print "IDs to be replaced:"
 	for i in full_list:
 		if i in match_dict:
 			print i, match_dict[i] #if key from matchfile is same as query file print both
+		else:
+			if i not in match_dict:
+				print i, "--> not found!"
 	replacements = {i: match_dict[i] for i in full_list if i in match_dict} #new dictionary with old key and new value
 	
 	infile = open(matchfile)
@@ -33,4 +38,4 @@ def dict_make():
 	infile.close()
 	outfile.close()
 
-dict_make()
+id_match()
