@@ -5,3 +5,21 @@ def validate_base_sequence(base_sequence, RNAflag):
 		seq.count('C') + 
 		seq.count('A') +
 		seq.count('G'))	
+
+def extract_matching_sequences(filename, string):
+	"""From a FASTA file named filename, extract all sequences whose descriptions contain string"""
+	sequences = []
+	seq = ''
+	with open(filename) as file:
+		for line in file:
+			if line[0] == '>':
+				if seq:
+					sequences.append(seq)
+				seq = ''
+				includeflag = string in line
+			else:
+				if includeflag:
+					seq += line[:-1]
+		if seq:
+			sequences.append(seq)
+	return sequences
