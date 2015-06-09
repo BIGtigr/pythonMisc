@@ -1,14 +1,20 @@
 import sys
 import csv
+import os
 
-"""Function reads in a query and match file, finds matching IDs and replaces based on new key value pairs in output file. Both query and match file must be tab delimited. Command line run: python hash_static.py queryfile matchfile outputfile column_number_of_id"""
-
+"""Script reads in a query and match file, finds matching IDs and replaces based on new key value pairs in output file. Both query and match file must be tab delimited. Command line run: python hash_static.py queryfile matchfile outputfile column_number_of_id"""
 
 def id_match():
+	print "Working Directory: ", os.getcwd()
+	if __name__ == '__main__':
+		if len(sys.argv) < 4:
+			print "Error!! Unacceptable number of arguments passed to script. Usage --> python hash_static.py queryfile.txt matchfile.txt outputfile.txt"
+		else:
+			pass
+
 	queryfile = sys.argv[1]
 	matchfile = sys.argv[2]
 	outputfile = sys.argv[3]
-
 
 	with open(queryfile) as file:
 		contents = file.read().splitlines(True) #read in file, split by line
