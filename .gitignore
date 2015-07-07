@@ -1,3 +1,12 @@
 matchfile.txt
 queryfile.txt
 testout.txt
+food.mtDNA.bowtie2.db.1.bt2
+food.mtDNA.bowtie2.db.2.bt2
+food.mtDNA.bowtie2.db.3.bt2
+food.mtDNA.bowtie2.db.4.bt2
+food.mtDNA.bowtie2.db.rev.1.bt2
+food.mtDNA.bowtie2.db.rev.2.bt2
+test_R1.fastq
+test_R2.fastq
+test_SE.fastq
