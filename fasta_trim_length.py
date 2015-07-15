@@ -17,7 +17,7 @@ def fasta_trim_length():
 
 	next = raw_input("Do you want to trim your fasta file by the median length?: ")
 
-	if next == 'yes' or 'y':
+	if 'y' in next:
 		#trim fasta based on median size
 		trim_metric = np.median(sizes)
 		print "Keeping sequences that are more than or equal to: ", trim_metric
@@ -34,5 +34,5 @@ def fasta_trim_length():
 		output_fasta.close()
 	else:
 		print "Successful completion, no trim"
-	
+		
 fasta_trim_length()
