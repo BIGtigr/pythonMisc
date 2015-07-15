@@ -15,19 +15,24 @@ def fasta_trim_length():
 	plt.savefig('length_hist.pdf')
 	plt.show()
 
-	#trim fasta based on median size
-	trim_metric = np.median(sizes)
-	print "Keeping sequences that are more than or equal to: ", trim_metric
-	kept_seqs = []
+	next = raw_input("Do you want to trim your fasta file by the median length?: ")
 
-	for i in SeqIO.parse(open(infasta, "rU"), "fasta"):
-		if len(i.seq) >= trim_metric:
-			kept_seqs.append(i)
+	if next == 'yes' or 'y':
+		#trim fasta based on median size
+		trim_metric = np.median(sizes)
+		print "Keeping sequences that are more than or equal to: ", trim_metric
+		kept_seqs = []
 
-	print "Kept %i sequences" % len(kept_seqs)
+		for i in SeqIO.parse(open(infasta, "rU"), "fasta"):
+			if len(i.seq) >= trim_metric:
+				kept_seqs.append(i)
+
+		print "Kept %i sequences" % len(kept_seqs)
 	
-	output_fasta = open("len_trimmed.fasta", "w")
-	SeqIO.write(kept_seqs, output_fasta, "fasta")
-	output_fasta.close()
-
+		output_fasta = open("len_trimmed.fasta", "w")
+		SeqIO.write(kept_seqs, output_fasta, "fasta")
+		output_fasta.close()
+	else:
+		print "Successful completion, no trim"
+	
 fasta_trim_length()
