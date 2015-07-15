@@ -1,8 +1,11 @@
 #Skeleton version
 import sys, os, subprocess
 from Bio import SeqIO
+import numpy as np
+
 
 def main():
+	"""BRIG genome reconstruction clone. Suitable for short fragmented reads (eg aDNA), forward and reverse."""
 	if '-paired' in sys.argv:
 		bowtie2_paired()
 	else:
@@ -78,10 +81,38 @@ def filter_hits():
 		se_records = (i for i in SeqIO.parse(sys.argv[4], "fastq") if i.id in split_hits) 		
 	
 
-filter_hits()
+#filter_hits()
 
 def blast_align():
 	pass
+
+
+def perc_ident_check():
+	#check if hits after first hit are at same percent idenity, if so keep and check next if not only pull first hit
+	arr = np.loadtxt('test_array.txt', delimiter='\t')
+	print arr
+
+perc_ident_check()
+
+def gen_xml():
+	#sort by start and end ranges 
+	with open('BLASTOUT', 'r') as f, open ('sortedRing', 'w') as out:
+		command = ("awk '{if($9>$10) print $10,$9,$3; else if($9<$10) print $9,$10,$3}'" f > out)
+		print "Number of sorted reads to be mapped: %d" %d len(out)
+		
+		subprocess.call(command, shell=True, stdout=out)
+	f.close()
+
+	#generate feature list
+	with open('sortedRing', 'r') as f, open('featurelist.xml', 'w') as feat:
+		command = ("awk '{if($3>=95.0 && $3<97.0) print "<feature color=\"rgb(254,230,206)\" decoration=\"arc\"><featureRange start=\""$1"\" stop=\""$2"\" label=\""$3"\" /></feature>"; else if($3>=97.0 && $3<100.0) print "<feature color=\"rgb(253,174,107)\" decoration=\"arc\"><featureRange start=\""$1"\" stop=\""$2"\" label=\""$3"\" /></feature>"; else if($3 == 100.0) print "<feature color=\"rgb(230,85,13)\" decoration=\"arc\"><featureRange start=\""$1"\" stop=\""$2"\" label=\""$3"\" /></feature>"}' f > feat)
+		subprocess.call(command, shell=True, stdout=out)
+	feat.close()
+
+	#generate full XML file
+
+def draw_genome():
+	pass ##cgviewer script (are there better options to this?
 
 def get_consensus():
 	pass
