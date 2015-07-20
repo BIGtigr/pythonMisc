@@ -12,8 +12,12 @@ def fasta_trim_length():
 	print "Number of sequences: ", len(sizes), "\n", "Minimum length: ",  min(sizes), "\n", "Maximum length: ", max(sizes)
 	print "Median length: ", np.median(sizes)
 	plt.hist(sizes, bins=25)
-	plt.savefig('length_hist.pdf')
-	plt.show()
+	plt.show(block=False)
+	next = raw_input("Save histogram pdf?: ")
+
+	if 'y' in next:
+		save_name = raw_input("Save as: ")
+		plt.savefig(save_name)
 
 	next = raw_input("Do you want to trim your fasta file by the median length?: ")
 
