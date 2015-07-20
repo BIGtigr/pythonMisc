@@ -1,6 +1,5 @@
 from Bio import SeqIO
-import sys
-import pylab
+import sys, pylab
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -13,10 +12,10 @@ def fasta_trim_length():
 	print "Median length: ", np.median(sizes)
 	plt.hist(sizes, bins=25)
 	plt.show(block=False)
-	next = raw_input("Save histogram pdf?: ")
+	next = raw_input("Save histogram?: ")
 
 	if 'y' in next:
-		save_name = raw_input("Save as: ")
+		save_name = raw_input("Save as (default is png, to save as pdf add file extension): ")
 		plt.savefig(save_name)
 
 	next = raw_input("Do you want to trim your fasta file by the median length?: ")
