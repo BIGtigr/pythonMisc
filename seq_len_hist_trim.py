@@ -1,7 +1,12 @@
 from Bio import SeqIO
-import sys, pylab
+import sys, pylab, os
 import numpy as np
 import matplotlib.pyplot as plt
+
+if len(sys.argv) != 2: #checks that input file passed to script
+	print "Error: no input file specified"
+	print "Usage --> python seq_len_hist_trim.py input.fast[a|q] <fastq/fasta>"
+	sys.exit(1)
 
 def main():
 	"""Script generates summary statistics on sequence lengths in a single fastq or fasta file, 
@@ -9,27 +14,38 @@ def main():
 	The file can also be trimmed according to the calculated median sequence length. Two arguments
 	passed to script: the fastq or fasta file and a string indicating the file type. Example
 	useage:	python seq_len_hist_trim.py input.fasta fasta"""
+	fasta_extensions = ('.fasta', '.fna', '.fa')
+	fastq_extensions = ('.fastq', '.fq')
+	input = sys.argv[1]
+	#make sure file exists in path/working directory
+	assert os.path.exists(input), 'File does not exist: %s. Do you need to provide the path?' %input	
 
-	if "fasta" in sys.argv[1:]:
+
+	if input.endswith(fasta_extensions) or "fasta" in sys.argv[1:]:
 		fasta_trim_length()
-	elif "fastq" in sys.argv[1:]:
+	elif input.endswith(fastq_extensions) or "fastq" in sys.argv[1:]:
 		fastq_trim_length()
 	else:
-		print "Must specify if input is fastq or fasta"
+		print "File extension not recognized: Please rerun and specify if fastq or fasta file"
 
 def fastq_trim_length():
-        infastq = sys.argv[1]
+        input = sys.argv[1]
 
-        sizes = [len(rec) for rec in SeqIO.parse(infastq, "fastq")]
-        print "Number of sequences: ", len(sizes)
+        sizes = [len(rec) for rec in SeqIO.parse(input, "fastq")]
+        print "---------------------------"
+	print "Summary Statistics: "
+	print "--------------------------"
+	print "Number of sequences: ", len(sizes)
 	print "Minumum length: ", min(sizes)
 	print "Maximum length: ", max(sizes)
         print "Median length: ", np.median(sizes)
+
+	print "---------------------------"
         plt.hist(sizes, bins=25, facecolor='green')
         plt.xlabel('fragment length')
         plt.ylabel('count')
         #plt.grid(True) #uncomment to include background grid
-        plt.title(infastq)
+        plt.title(input)
         plt.show(block=False)
         next = raw_input("Save histogram?: ")
 
@@ -45,7 +61,7 @@ def fastq_trim_length():
                 print "Keeping sequences that are more than or equal to: ", trim_metric
                 kept_seqs = []
 
-                for i in SeqIO.parse(open(infastq, "rU"), "fastq"):
+                for i in SeqIO.parse(open(input, "rU"), "fastq"):
                         if len(i.seq) >= trim_metric:
                                 kept_seqs.append(i)
 
@@ -59,16 +75,21 @@ def fastq_trim_length():
                 print "Successful completion, no trim"
 
 def fasta_trim_length():
-        infasta = sys.argv[1]
+        input = sys.argv[1]
 
         #get size statistics and generate length histogram
-        sizes = [len(rec) for rec in SeqIO.parse(infasta, "fasta")]
-        print "Number of sequences: ", len(sizes),
-	print "Minimum length: ",  min(sizes), 
+        sizes = [len(rec) for rec in SeqIO.parse(input, "fasta")]
+	print "---------------------------"
+        print "Summary Statistics: "
+        print "--------------------------"
+        print "Number of sequences: ", len(sizes)
+	print "Minimum length: ",  min(sizes)
 	print "Maximum length: ", max(sizes)
         print "Median length: ", np.median(sizes)
+
         plt.hist(sizes, bins=25)
         plt.show(block=False)
+	print "---------------------------"
         next = raw_input("Save histogram?: ")
 
         if 'y' in next:
@@ -83,7 +104,7 @@ def fasta_trim_length():
                 print "Keeping sequences that are more than or equal to: ", trim_metric
                 kept_seqs = []
 
-                for i in SeqIO.parse(open(infasta, "rU"), "fasta"):
+                for i in SeqIO.parse(open(input, "rU"), "fasta"):
                         if len(i.seq) >= trim_metric:
                                 kept_seqs.append(i)
 
