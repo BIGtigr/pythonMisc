@@ -49,8 +49,13 @@ def fastq_trim_length():
 	print "Minumum length: ", min(sizes)
 	print "Maximum length: ", max(sizes)
         print "Median length: ", np.median(sizes)
-
+	print "Mean length: ", np.mean(sizes)
+	print "25th percentile: ", np.percentile(sizes, 25)
+	print "75th percentile: ", np.percentile(sizes, 75)
+        print "Standard deviation: ", np.std(sizes)
+        print "Variance: ", np.var(sizes)
 	print "---------------------------"
+
         plt.hist(sizes, bins=25, facecolor='green')
         plt.xlabel('fragment length')
         plt.ylabel('count')
@@ -98,10 +103,15 @@ def fasta_trim_length():
 	print "Minimum length: ",  min(sizes)
 	print "Maximum length: ", max(sizes)
         print "Median length: ", np.median(sizes)
+        print "Mean length: ", np.mean(sizes)
+        print "25th percentile: ", np.percentile(sizes, 25)
+        print "75th percentile: ", np.percentile(sizes, 75)
+	print "Standard deviation: ", np.std(sizes)
+	print "Variance: ", np.var(sizes)
+        print "---------------------------"
 
         plt.hist(sizes, bins=25)
         plt.show(block=False)
-	print "---------------------------"
         next = raw_input("Save histogram?: ")
 
         if 'y' in next:
