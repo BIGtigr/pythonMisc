@@ -1,3 +1,19 @@
+#!/usr/bin/env python
+
+"""Script generates summary statistics on sequence lengths in a single fastq or fasta file, 
+generates a length histogram using matplot lib that can be optionally saved as a png or pdf.
+The file can also be trimmed according to the calculated median sequence length. 
+
+Two arguments passed to script: the fastq or fasta file and a string indicating the file type. Example
+useage: python seq_len_hist_trim.py input.fasta fasta."""
+
+__author__="Allison E Mann"
+__license__="GPL"
+__email__="allison.e.mann@ou.edu"
+
+#This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. 
+#This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details <http://www.gnu.org/licenses/>
+
 from Bio import SeqIO
 import sys, pylab, os
 import numpy as np
@@ -9,17 +25,11 @@ if len(sys.argv) != 2: #checks that input file passed to script
 	sys.exit(1)
 
 def main():
-	"""Script generates summary statistics on sequence lengths in a single fastq or fasta file, 
-	generates a length histogram using matplot lib that can be optionally saved as a png or pdf.
-	The file can also be trimmed according to the calculated median sequence length. Two arguments
-	passed to script: the fastq or fasta file and a string indicating the file type. Example
-	useage:	python seq_len_hist_trim.py input.fasta fasta"""
 	fasta_extensions = ('.fasta', '.fna', '.fa')
 	fastq_extensions = ('.fastq', '.fq')
 	input = sys.argv[1]
 	#make sure file exists in path/working directory
 	assert os.path.exists(input), 'File does not exist: %s. Do you need to provide the path?' %input	
-
 
 	if input.endswith(fasta_extensions) or "fasta" in sys.argv[1:]:
 		fasta_trim_length()
@@ -46,6 +56,8 @@ def fastq_trim_length():
         plt.ylabel('count')
         #plt.grid(True) #uncomment to include background grid
         plt.title(input)
+	print "Error: no file passed to script"
+	#	sys.exit()
         plt.show(block=False)
         next = raw_input("Save histogram?: ")
 
