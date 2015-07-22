@@ -13,7 +13,7 @@ def length_histogram():
 	freq_table=sys.argv[2]
 	
 	sizes=[len(seq) for seq in SeqIO.parse(fastq_input, "fastq")]
-	print sizes	
+	#print sizes	
 
 	arr=np.loadtxt(freq_table, delimiter="\t", dtype=int)
 	count=arr[:,0]
