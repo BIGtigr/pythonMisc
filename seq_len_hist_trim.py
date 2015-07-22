@@ -4,7 +4,7 @@
 generates a length histogram using matplot lib that can be optionally saved as a png or pdf.
 The file can also be trimmed according to the calculated median sequence length. 
 
-Two arguments passed to script: the fastq or fasta file and a string indicating the file type. Example
+Two arguments passed to script: the fastq or fasta file and (optionally) a string indicating the file type. Example
 useage: python seq_len_hist_trim.py input.fasta fasta."""
 
 __author__="Allison E Mann"
