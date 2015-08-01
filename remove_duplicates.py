@@ -25,6 +25,12 @@ def find_pcr_opt_dups(dups):
 			sameSamp = dupGroup.get_group(name)['record'].reset_index()
 			pcrDups.append(sameSamp['record'][0]) 
 		else:
+			print "---------------------"
+			print "Duplicate reads in group:"
+			print name, "\n"
+			print "Most likely from this sample:"
+			print grouped_samples.value_counts().idxmax() #most common id in group
+			print "---------------------"
 			possibleOptNames.append(name)
 	print "Found %i possible optical duplicates..." % len(possibleOptNames)
 	print "Processing"
@@ -64,8 +70,6 @@ def find_pcr_opt_dups(dups):
 	print "Complete!"
 	print "Found %i PCR duplicates" % len(pcrDups)
 	print "Found %i optical duplicates" % len(optDups)
-	print optDups
-	print pcrDups
 
 	with open("pcr_duplicates.txt", "w") as pcrOut:
 		for record in pcrDups:
@@ -81,7 +85,7 @@ def read_sam_get_nondups(inputfile):
 	"""Loads and extracts data from sorted sam file
 	"""
 	data = []
-	with open(inputfile, "r") as f, open("read_info.txt", "w") as outfile:
+	with open(inputfile, "r") as f:
 		for line in f:
 			try:
 				record = line.split()
@@ -104,11 +108,8 @@ def read_sam_get_nondups(inputfile):
 				titleCig = title + "_" + cigar
 				data.append([titleCig, ref, start, x, y, sampleID, line])
 		dfSam = DataFrame(data)
-		dfSam.to_csv(outfile, sep="\t", index=False, header=False)
-		outfile.close()
 
 	nondupsOut = "nonduplicates.txt"
-	dupsOut = "duplicates.txt"
 
 	dfSam.columns = ['titleCig', 'ref', 'start', 'x', 'y', 'sampleID', 'record']
 	dfSam['count'] = dfSam.groupby('start')['start'].transform('count')
@@ -116,11 +117,15 @@ def read_sam_get_nondups(inputfile):
 	nondups = dfSam[dfSam['count'] == 1]
 	nondups.record.to_csv(nondupsOut, index=False, header=False)
 	dups = dfSam[dfSam['count'] > 1]
-	dups.to_csv(dupsOut, sep="\t", index=False, header=False)
 	find_pcr_opt_dups(dups)
 
 
 def main():
+	"""Script reads in sam file sorted by reference start location, extracts information from each
+	record and processes to find nonduplicated, PCR duplicated, and optical duplicated records. 
+	Useage: python remove_duplicates.py input.sam. Output files: nonduplicates.txt,
+	pcr_duplicates.txt, optical_duplicates.txt 
+	"""
 	inputfile = sys.argv[1]
 	read_sam_get_nondups(inputfile)
 
