@@ -6,6 +6,9 @@ import sys
 import numpy as np
 
 def find_pcr_opt_dups(dups):
+	"""From a dataframe generated using read_sam_get_nondups splits putative PCR duplicates from
+	putative optical duplicates
+	"""
 	#initalize empty lists
 	optDups = []
 	pcrDups = []
@@ -16,21 +19,23 @@ def find_pcr_opt_dups(dups):
 	dupGroup = dupsBin.groupby(['bin_group', 'start'], as_index=False)
 
 	#if there are duplicates but all from same sample == PCR duplicate, else add group name to list
-	###THIS IS FAILING!!##
 	for name, group in dupGroup:
 		grouped_samples = dupGroup.get_group(name)['sampleID']
 		if len(grouped_samples.unique()) == 1:
-			pcrDups.append(dupGroup.get_group(name)['record'])
+			sameSamp = dupGroup.get_group(name)['record'].reset_index()
+			pcrDups.append(sameSamp['record'][0]) 
 		else:
 			possibleOptNames.append(name)
-	print possibleOptNames
+	print "Found %i possible optical duplicates..." % len(possibleOptNames)
+	print "Processing"
 
 	nit = 0
+	s = "."
 	for i in range(0, len(possibleOptNames)):
+		print s.join(s)
 		xvals = dupGroup.get_group(possibleOptNames[nit])['x'].reset_index()
 		yvals = dupGroup.get_group(possibleOptNames[nit])['y'].reset_index()
 		records = dupGroup.get_group(possibleOptNames[nit])['record'].reset_index()
-		print "collecting data from group", possibleOptNames[nit]
 		nit += 1
 		fin = 0
 		sin = 1
@@ -55,8 +60,12 @@ def find_pcr_opt_dups(dups):
 			else:
 				print "other"
 
-	print pcrDups
+
+	print "Complete!"
+	print "Found %i PCR duplicates" % len(pcrDups)
+	print "Found %i optical duplicates" % len(optDups)
 	print optDups
+	print pcrDups
 
 	with open("pcr_duplicates.txt", "w") as pcrOut:
 		for record in pcrDups:
