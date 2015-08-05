@@ -33,9 +33,9 @@ def find_pcr_opt_dups(dups):
 			print "---------------------"
 			possibleOptNames.append(name)
 
-	#get counts table by sample per bin group
+	#get crosstab table by sample per bin group
 	dupsGroup_counts = dups.assign(duplicates = dups['tileCig'] + "_" + dups['ref'] + "_" + dups['start'])
-	count_table = dupsGroup_counts.groupby(['duplicates', 'sampleID'])['duplicates'].agg({'Counts':'count'})
+	count_table = pd.crosstab([dupsGroup_counts.ref, dupsGroup_counts.start, dupsGroup_counts.tileCig], dupsGroup_counts.sampleID, margins=True)
 	with open("count_table.txt", "w") as countTable:
 		count_table.to_csv(countTable)
 	countTable.close()
