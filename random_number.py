@@ -5,7 +5,7 @@ import sys
 """
 
 with open("random_numbers.txt", "w") as f:
-	list = random.sample(range(1,int(sys.argv[1])), int(sys.argv[2]))
+	list = random.sample(xrange(1,int(sys.argv[1])), int(sys.argv[2]))
 	for item in list:
 		print >> f, item
 
