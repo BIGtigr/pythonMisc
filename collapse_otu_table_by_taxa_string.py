@@ -11,6 +11,10 @@ import sys
 df = pd.read_csv(sys.argv[1], sep="\t")
 collapsed_df = df.groupby("OTU ID").sum()
 
+dups = df.shape[0] - collapsed_df.shape[0]
+
+print "Number of duplicate rows to be collapsed: %i" %dups 
+
 with open("collapsed_otu_table.txt", "w") as outfile:
 	collapsed_df.to_csv(outfile, sep="\t")
 
