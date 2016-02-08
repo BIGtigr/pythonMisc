@@ -37,6 +37,6 @@ with open("median_otu_table.txt", "w") as outfile:
 
 outfile.close()
 
-print + colors.COMPLETE "Complete, written to median_otu_table.txt" + colors.ENDC	
+print colors.COMPLETE + "Complete, written to median_otu_table.txt" + colors.ENDC	
 
 
