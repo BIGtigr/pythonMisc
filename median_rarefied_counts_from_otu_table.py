@@ -23,7 +23,7 @@ for f in files:
 	df = pd.read_csv(f, sep="\t", skiprows=1, header=0)
 	list.append(df)
 
-print colors.COMPLETE + "Total number of files read: %i" % len(list) + colors.ENDC
+print colors.COMPLETE + "Total number of files read: %i" % len(list)
 
 frame = pd.concat(list)
 print colors.COMPLETE + "Concatenated Data Frame Constructed" + colors.ENDC
