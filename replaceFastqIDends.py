@@ -1,8 +1,11 @@
-"""Adds those annoying /1 and /2 to your id file (old SRA format) before filtering your reads from your pair1 and pair2 fastq files
+#!/usr/bin/env python
+
+"""Adds those annoying /1 and /2 to your id file (old SRA format) before filtering your reads from your pair1 and pair2 fastq files (after AdapterRemoval)
+Example usage (in directory with multiple files with .id as suffix: python replaceFastqIDends.py
 """
 import glob
 
-flist = glob.glob('*ids')
+flist = glob.glob('*.ids')
 for f in flist:
 	inf = open(f, 'r')
 	outf = open(f.replace('ids', 'fixed.ids'), 'w')

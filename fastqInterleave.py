@@ -1,5 +1,5 @@
 #!/usr/bin/python
-"""Script takes two paired end and one singleton fastq file, interleaves the pair 1 and pair 2 matches, and concatenates the singletons to the end. Must have same number of pair 1 and pair 2 reads. Usage: python $
+"""Script takes two paired end and one singleton fastq file, interleaves the pair 1 and pair 2 matches, and concatenates the singletons to the end. Must have same number of pair 1 and pair 2 reads. Usage: python fastqInterleave.py pair1.fastq pair2.fastq singleton.fastq > interleave.fastq
 """
 
 import sys
